@@ -8,6 +8,16 @@ All code contained is proprietary and IP of Hasaan Mohsin.
 
 ---
 
+
+## Use the chatbot!
+
+### Access the app directly via
+
+```
+https://eataly-ai.streamlit.app/
+```
+---
+
 ## Features
 
 * PDF knowledge base ingestion
@@ -46,16 +56,6 @@ All code contained is proprietary and IP of Hasaan Mohsin.
 ├── .env
 ├── requirements.txt
 └── README.md
-```
-
----
-
-## Use the chatbot!
-
-### Access the app directly via
-
-```
-https://eataly-ai.streamlit.app/
 ```
 
 ---
