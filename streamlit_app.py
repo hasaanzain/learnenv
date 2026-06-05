@@ -48,8 +48,7 @@ def track_user_query(user_query, llm_response):
 
     return {
         "timestamp_utc": timestamp,
-        "user_query": user_query,
-        "llm_response": llm_response
+        "user_query": user_query
     }
 
 
@@ -115,7 +114,7 @@ if prompt:
                 # Log the query only after the response has streamed to the user.
                 # This avoids making the user wait for Google Sheets logging.
                 try:
-                    track_user_query(user_query, response)
+                    track_user_query(user_query)
                 except Exception as log_error:
                     print(f"Query logging failed: {log_error}")
 
