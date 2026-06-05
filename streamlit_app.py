@@ -1,7 +1,6 @@
 import streamlit as st
 from langsmith import traceable
 from pathlib import Path
-import json
 from datetime import datetime, timezone
 import gspread
 from google.oauth2.service_account import Credentials
@@ -13,7 +12,6 @@ st.set_page_config(page_title="Eataly AI")
 st.title("Eataly AI")
 
 path = Path("eataly_ai_knowledge_base")
-QUERY_LOG_PATH = Path("user_queries.jsonl")
 
 
 @st.cache_resource
@@ -29,10 +27,12 @@ def load_llm():
 @st.cache_resource
 def get_sheet():
     scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+
     creds = Credentials.from_service_account_info(
         st.secrets["gcp_service_account"],
         scopes=scopes
     )
+
     client = gspread.authorize(creds)
 
     sheet_id = st.secrets["GOOGLE_SHEET_ID"]
@@ -50,7 +50,6 @@ def track_user_query(user_query):
         "timestamp_utc": timestamp,
         "user_query": user_query
     }
-
 
 
 vectordb = load_vectordb()
@@ -83,9 +82,6 @@ if prompt:
 
     st.session_state.user_queries.append(user_query)
 
-    # Continuously logs to user_queries.jsonl and traces to LangSmith
-    track_user_query(user_query)
-
     st.session_state.chat_history.append(
         {
             "role": "user",
@@ -114,6 +110,13 @@ if prompt:
                         "content": response
                     }
                 )
+
+                # Log the query only after the response has streamed to the user.
+                # This avoids making the user wait for Google Sheets logging.
+                try:
+                    track_user_query(user_query)
+                except Exception as log_error:
+                    print(f"Query logging failed: {log_error}")
 
             except Exception as e:
                 error_msg = f"Error: {str(e)}"
