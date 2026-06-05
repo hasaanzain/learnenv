@@ -40,15 +40,16 @@ def get_sheet():
 
 
 @traceable(name="User Query")
-def track_user_query(user_query):
+def track_user_query(user_query, llm_response):
     timestamp = datetime.now(timezone.utc).isoformat()
 
     sheet = get_sheet()
-    sheet.append_row([timestamp, user_query])
+    sheet.append_row([timestamp, user_query, llm_response])
 
     return {
         "timestamp_utc": timestamp,
-        "user_query": user_query
+        "user_query": user_query,
+        "llm_response": llm_response
     }
 
 
@@ -114,7 +115,7 @@ if prompt:
                 # Log the query only after the response has streamed to the user.
                 # This avoids making the user wait for Google Sheets logging.
                 try:
-                    track_user_query(user_query)
+                    track_user_query(user_query, response)
                 except Exception as log_error:
                     print(f"Query logging failed: {log_error}")
 
