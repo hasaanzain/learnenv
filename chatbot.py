@@ -66,7 +66,7 @@ def build_vectordb(chunks):
 
 def get_llm():
     # streaming=True enables llm.stream(...)
-    return ChatOpenAI(model="gpt-5-nano", temperature=0.6, streaming=True, reasoning_effort='low')
+    return ChatOpenAI(model="gpt-5-nano", temperature=0.4, streaming=True, reasoning_effort='low')
 
 @traceable
 def get_vectordb(path):
