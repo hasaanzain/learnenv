@@ -40,11 +40,11 @@ def get_sheet():
 
 
 @traceable(name="User Query")
-def track_user_query(user_query, llm_response):
+def track_user_query(user_query):
     timestamp = datetime.now(timezone.utc).isoformat()
 
     sheet = get_sheet()
-    sheet.append_row([timestamp, user_query, llm_response])
+    sheet.append_row([timestamp, user_query])
 
     return {
         "timestamp_utc": timestamp,
