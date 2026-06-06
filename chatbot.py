@@ -77,7 +77,7 @@ def get_vectordb(path):
     return vectordb
 
 @traceable
-def chatbot_stream(query, vectordb=None, k=3, llm=None):
+def chatbot_stream(query, vectordb=None, k=5, llm=None):
     if llm is None:
         llm = get_llm()
 
